@@ -74,7 +74,51 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+        // update product data
+        DB::beginTransaction();
+        try {
+            $validated = $request->validated();
+            $product->update([
+                'name' => $validated['name'],
+                'description' => $validated['description'],
+            ]);
+
+            // remove old images
+            if (!empty($validated['remove_images'])) {
+                $imagesToRemove = $product->images()
+                    ->whereIn('id', $validated['remove_images'])
+                    ->get();
+
+                foreach ($imagesToRemove as $productImage) {
+                    if (!empty($productImage->image_path) && Storage::disk('public')->exists($productImage->image_path)) {
+                        Storage::disk('public')->delete($productImage->image_path);
+                    }
+
+                    $productImage->delete();
+                }
+            }
+
+            // add new images
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    // update product images path
+                    $path = Storage::disk('public')->putFile('products', $image);
+
+                    // update product images adding new images
+                    $product->images()->create([
+                        'image_path' => $path,
+                    ]);
+                }
+            }
+            DB::commit();
+            return redirect()->route('products.index')->with('success', 'Product updated successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return back()
+                ->withInput()
+                ->with('error', 'Something went wrong.');
+        }
     }
 
     public function destroy(Product $product)
