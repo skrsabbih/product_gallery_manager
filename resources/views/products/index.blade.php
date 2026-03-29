@@ -24,7 +24,9 @@
                     <div class="card h-100 shadow-sm border-0">
                         @if ($product->images->count())
                             <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" class="card-img-top"
-                                alt="{{ $product->name }}" style="height: 220px; object-fit: cover;">
+                                alt="{{ $product->name }}" style="height: 220px; object-fit: cover;"
+                                onerror="this.onerror=null; this.src='{{asset('images/default-image.webp')}}';"
+                                >
                         @else
                             <div class="bg-light d-flex align-items-center justify-content-center" style="height: 220px;">
                                 <span class="text-muted">No Image Available</span>

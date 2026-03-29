@@ -32,7 +32,8 @@
                         <div class="col-md-6 col-lg-4">
                             <div class="card h-100 border-0 shadow-sm">
                                 <img src="{{ asset('storage/' . $image->image_path) }}" alt="{{ $product->name }}"
-                                    class="card-img-top" style="height: 250px; object-fit: cover;">
+                                    class="card-img-top" style="height: 250px; object-fit: cover;"
+                                    onerror="this.onerror=null; this.src='{{asset('images/default-image.webp')}}';">
                             </div>
                         </div>
                     @endforeach

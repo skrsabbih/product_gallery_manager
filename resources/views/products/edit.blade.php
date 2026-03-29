@@ -42,8 +42,8 @@
                                 <div class="col-md-4 existing-image-item" data-image-id="{{ $image->id }}">
                                     <div class="card shadow-sm border-0 h-100">
                                         <img src="{{ asset('storage/' . $image->image_path) }}" alt="{{ $product->name }}"
-                                            class="card-img-top" style="height: 220px; object-fit: cover;">
-
+                                            class="card-img-top" style="height: 220px; object-fit: cover;"
+                                            onerror="this.onerror=null; this.src='{{ asset('images/default-image.webp') }}';">
                                         <div class="card-body p-3">
                                             <button type="button" class="btn btn-sm btn-danger w-100 remove-image-btn"
                                                 data-image-id="{{ $image->id }}">
